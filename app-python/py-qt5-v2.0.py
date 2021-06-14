@@ -1,6 +1,8 @@
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtSerialPort import QSerialPort, QSerialPortInfo
 from PyQt5.QtCore import QIODevice
+from tkinter import *
+from tkinter import messagebox as mb
 
 
 latin_alphabet = {'A': '.-',
@@ -72,6 +74,37 @@ if arduino_port == '':
 else:
     serial.setPortName(arduino_port)
     serial.open(QIODevice.ReadWrite)
+
+    def comand_info():
+        tk = Tk()
+        info_txt = "Команды юных разработчкив, которые разработали алгоритм дешифровки кода Морзе!\n\
+                        Маснуров Владислав\n\
+                        Мырзабеков Рамис\n\
+                        Руденко Максим\n\
+                        Громов Дмитрий"
+        mb.showinfo("AVOCADO TEAM", info_txt)
+        tk.mainloop()
+
+
+    def app_des():
+        tk = Tk()
+        info_txt = "Приложение со вместо принимает код Морзе и дешифрует его в символы латиницы.\n\
+                        Имеется в данныый момент только один режим - Азбука Морзе -> Латиница\n"
+        mb.showinfo("AVOCADO TEAM", info_txt)
+        tk.mainloop()
+
+
+
+    def clean_first_field():
+        ui.text_in_out.clear()
+
+    def clean_second_field():
+        ui.morse_out.clear()
+
+
+    def clean_fields():
+        ui.text_in_out.clear()
+        ui.morse_out.clear()
 
 
     def data_read():
@@ -157,6 +190,12 @@ else:
 
     serial.readyRead.connect(data_read)
     ui.modeB.clicked.connect(data_write)
+    ui.cleanB.clicked.connect(clean_fields)
+    ui.clean_first.triggered.connect(clean_first_field)
+    ui.clean_second.triggered.connect(clean_second_field)
+    ui.clean_all.triggered.connect(clean_fields)
+    ui.our_comand.triggered.connect(comand_info)
+    ui.app_descrip.triggered.connect(app_des)
     ui.change_mode.currentIndexChanged.connect(change_mode)
 
 ui.show()

@@ -43,7 +43,7 @@
      </property>
     </item>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>110</x>
@@ -166,48 +166,48 @@
     <property name="title">
      <string>Настройка</string>
     </property>
-    <addaction name="action_4"/>
-    <addaction name="action_5"/>
-    <addaction name="action_6"/>
+    <addaction name="clean_first"/>
+    <addaction name="clean_second"/>
+    <addaction name="clean_all"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
      <string>Справка</string>
     </property>
-    <addaction name="action"/>
-    <addaction name="action_2"/>
-    <addaction name="action_3"/>
+    <addaction name="our_comand"/>
+    <addaction name="app_descrip"/>
+    <addaction name="morse_alph"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="action">
+  <action name="our_comand">
    <property name="text">
     <string>Команда</string>
    </property>
   </action>
-  <action name="action_2">
+  <action name="app_descrip">
    <property name="text">
     <string>Приложение</string>
    </property>
   </action>
-  <action name="action_3">
+  <action name="morse_alph">
    <property name="text">
     <string>Азбука Морзе</string>
    </property>
   </action>
-  <action name="action_4">
+  <action name="clean_first">
    <property name="text">
     <string>Очистить первое поле</string>
    </property>
   </action>
-  <action name="action_5">
+  <action name="clean_second">
    <property name="text">
     <string>Очистить второе поле</string>
    </property>
   </action>
-  <action name="action_6">
+  <action name="clean_all">
    <property name="text">
     <string>Очистить все</string>
    </property>
