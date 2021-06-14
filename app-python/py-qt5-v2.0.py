@@ -2,6 +2,54 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtSerialPort import QSerialPort, QSerialPortInfo
 from PyQt5.QtCore import QIODevice
 
+
+latin_alphabet = {'A': '.-',
+                  'B': '-...',
+                  'C': '-.-.',
+                  'D': '-..',
+                  'E': '.',
+                  'F': '..-.',
+                  'G': '--.',
+                  'H': '....',
+                  'I': '..',
+                  'J': '.---',
+                  'K': '-.-',
+                  'L': '.-..',
+                  'M': '--',
+                  'N': '-.',
+                  'O': '---',
+                  'P': '.--.',
+                  'Q': '--.-',
+                  'R': '.-.',
+                  'S': '...',
+                  'T': '-',
+                  'U': '..-',
+                  'V': '...-',
+                  'W': '-..-',
+                  'X': '-..-',
+                  'Y': '-.--',
+                  'Z': '--..',
+                  '0': '-----',
+                  '1': '.----',
+                  '2': '..---',
+                  '3': '...--',
+                  '4': '....-',
+                  '5': '.....',
+                  '6': '-....',
+                  '7': '--...',
+                  '8': '---..',
+                  '9': '----.',
+                  '.': '......',
+                  ',': '.-.-.-',
+                  ':': '---...',
+                  ';': '-.-.-.',
+                  '-': '-....-',
+                  '!': '--..--',
+                  '?': '..--..',
+                  ' ': ' '
+                  }
+
+
 arduino_port = ''
 mode_flag = "m_to_l"
 in_str = ''
@@ -38,11 +86,36 @@ else:
             ui.text_in_out.setPlainText(in_str)
 
 
+    def to_morse_sym(sym):
+        sym = sym.upper()
+        sym = latin_alphabet.get(sym)
+        if sym == None:
+            return "SYMERR"
+        return sym
+
+
+    def to_morse_stroka(stroka):
+        sym = ''
+        i = -1
+        for value in stroka:
+            result = to_morse_sym(value)
+            if result == "SYMERR":
+                sym += 'err'  # oшибка при чтении символа
+                continue;
+            if value == ' ':
+                sym += ' '
+                continue
+            if sym == '':
+                sym += result
+            else:
+                sym += ' ' + result
+        return sym
+
+
     def data_write():
         global in_str
         in_str = ui.text_in_out.toPlainText()
         in_str = str(in_str).upper()
-        print(in_str)
         if ' ' in in_str:
             in_str.split(' ')
             word = ''
@@ -57,6 +130,8 @@ else:
                     word = ''
         else:
             serial.write(str(in_str).encode())
+        in_str = to_morse_stroka(in_str)
+        ui.morse_out.setPlainText(in_str)
 
 
     def change_mode():
