@@ -18,7 +18,7 @@ unsigned long released_time; // Переменная для хранения в�
 unsigned long sound_time;    // Переменная для хранения времени для определения длительности сигнала
 
 String userInput = "";       // Переменная хранящая строку ввода пользователя
-String mode_flag = "m_to_l"; // Флаг для переключения между режимами: "a_to_l", "l_to_a" (по умолчанию "a_to_l")
+String mode_flag = "m_to_l"; // Флаг для переключения между режимами: "m_to_l", "l_to_m" (по умолчанию "m_to_l")
 
 int j = 0;
 
@@ -58,52 +58,53 @@ void loop() {
 }
 
 void to_morse(){
-  userInput = "SOS";
-  int j = 0;
-  if (userInput == "m_to_l"){
-    mode_flag = "m_to_l";
-  }
-  else{
-    while (userInput[j] != '\0'){
-      int index = 0;
-      for (int i = 0; i <= 42; i++){
-        if ((String)userInput[j] == symbols[i]){
-          index = i;
-          break;
-        }
-      }
-      int k = 0;
-      while (morse_codes[index][k] != '\0'){
-        if (morse_codes[index][k] == '-'){
-          Serial.println("-");
-          sound_time = millis();
-          while (millis() - sound_time < 550){
-            analogWrite(dynamic_pin, 10);
-          }
-          sound_time = millis();
-          while (millis() - sound_time < 100){
-            analogWrite(dynamic_pin, 0);
-          }
-        }
-        else if (morse_codes[index][k] == '.'){
-          Serial.println(".");
-          sound_time = millis();
-          while (millis() - sound_time < 150){
-            analogWrite(dynamic_pin, 10);
-          }
-          sound_time = millis();
-          while (millis() - sound_time < 100){
-            analogWrite(dynamic_pin, 0);
-          }
-        }
-        k++;
-      }
-      j++;
-      delay(900);
+  if (Serial.available() > 0) {
+    userInput = Serial.readString();
+    int j = 0;
+    if (userInput == "m_to_l"){
+      mode_flag = "m_to_l";
     }
-    delay(1800);
+    else if (userInput != "l_to_m") {
+      while (userInput[j] != '\0'){
+        int index = 0;
+        for (int i = 0; i <= 42; i++){
+          if ((String)userInput[j] == symbols[i]){
+            index = i;
+            break;
+          }
+        }
+        int k = 0;
+        while (morse_codes[index][k] != '\0'){
+          if (morse_codes[index][k] == '-'){
+            Serial.println("-");
+            sound_time = millis();
+            while (millis() - sound_time < 550){
+              analogWrite(dynamic_pin, 10);
+            }
+            sound_time = millis();
+            while (millis() - sound_time < 100){
+              analogWrite(dynamic_pin, 0);
+            }
+          }
+          else if (morse_codes[index][k] == '.'){
+            Serial.println(".");
+            sound_time = millis();
+            while (millis() - sound_time < 150){
+              analogWrite(dynamic_pin, 10);
+            }
+            sound_time = millis();
+            while (millis() - sound_time < 100){
+              analogWrite(dynamic_pin, 0);
+            }
+          }
+          k++;
+        }
+        j++;
+        delay(900);
+      }
+      delay(1800);
+    }
   }
-  mode_flag = "m_to_l";
 }
 
 void from_morse() {
@@ -179,7 +180,7 @@ void from_morse() {
       lcd.setCursor(--count_sym_1, count_sym_2);
       lcd.print(userInput);
       delay(1500);
-      lcd.setCursor(--count_sym_1, count_sym_2);
+      lcd.setCursor(count_sym_1, count_sym_2);
       lcd.print("      ");
       userInput = "";
     }
